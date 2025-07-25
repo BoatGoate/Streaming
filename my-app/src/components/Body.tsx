@@ -1,48 +1,67 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
+import { getPopularMovies, searchMovies } from './services/api';
+import { useNavigate } from 'react-router-dom';
 
 type CardProps = {
+  imgSrc: string;
   title: string;
-  content: string;
+  onClick?: () => void; // Make onClick optional
 };
 
-function Card({ title, content }: CardProps) {
+function Card({ imgSrc, title, onClick }: CardProps) {
   return (
-    <div className="card">
+    <div className="card" onClick={onClick}>
+      <img src={imgSrc} alt={title}/>
       <h3>{title}</h3>
-      <p>{content}</p>
     </div>
   );
 }
 
 function Body() {
+  const [count, setCount] = useState(0); // Start with showing some cards
+  const [movies, setMovies] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const navigate = useNavigate();
 
-  const [count, setCount] = useState(0);
+  useEffect(() => {
+    const loadPopularMovies = async () => {
+      try {
+        const popularMovies = await getPopularMovies();
+        setMovies(popularMovies);
+      } catch (error) {
+        console.log(error);
+      } finally {
+        setLoading(false);
+      }
+    };
 
-  const generateCards = (num: number) => {setCount(num)};
+    loadPopularMovies();
+  }, []);
+  console.log(movies);
 
-  const cards = Array.from({ length: count }, (_, i) => ({
-    title: `Card ${i + 1}`,
-    content: `This is card number ${i + 1}`
-  }));
-
-
+  if(loading) {
+    return (<h1>Loading...</h1>);
+  }
+  
   return (
-    
-
-
-    <main style={{ padding: '1rem' }}>
-      <div style={{ marginBottom: '1rem' }}>
-        <button onClick={() => generateCards(24)}>Generate {count} Cards</button>
+    <main>
+      <div className="controls-panel">
+        <button onClick={() => setCount(16)}>Generate 16 Cards</button>
         <button onClick={() => setCount(6)}>Generate 6 Cards</button>
       </div>
 
       <div className="cards">
-        {cards.map((card, index) => (
-          <Card key={index} title={card.title} content={card.content} />
+        {movies.slice(0, count).map((movie, index) => (
+          <Card 
+            key={index} 
+            title={movie.title} 
+            imgSrc={`https://image.tmdb.org/t/p/w500${movie.poster_path}`}
+            onClick={() => navigate(`/about/${movie.id}`)} // Navigate to movie details
+          />
         ))}
       </div>
     </main>
-  )
+  );
 }
 
-export default Body
+export default Body;

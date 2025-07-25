@@ -7,29 +7,70 @@
 
 html, body {
   width: 100%;
-  height: 100%;
+  height: auto;
   overflow-x: hidden;
-background: #080F1D;
-background: -moz-linear-gradient(top, #080F1D 0%, #294B8A 66%, #A3ACCD 100%);
-background: -webkit-linear-gradient(top, #080F1D 0%, #294B8A 66%, #A3ACCD 100%);
-background: linear-gradient(to bottom, #080F1D 0%, #294B8A 66%, #A3ACCD 100%);
+  background: #080F1D;
+  background: -moz-linear-gradient(top, #080F1D 0%, #294B8A 66%, #A3ACCD 100%);
+  background: -webkit-linear-gradient(top, #080F1D 0%, #294B8A 66%, #A3ACCD 100%);
+  background: linear-gradient(to bottom, #080F1D 0%, #294B8A 66%, #A3ACCD 100%);
+  overflow-y: visible;
+}
+
+main {
+  flex: 1;
+  width: 100%;
+  padding: 1rem;
+  box-sizing: border-box;
+  min-height: 0; /* Change from 100vh to prevent overflow issues */
 }
 
 .cards {
   display: flex;
   flex-wrap: wrap;
-  justify-content: center;
-  gap: 5px; /* Space between cards */
+  justify-content: left;
+  gap: 15px; /* Increased space between cards */
 }
 
 .card {
-  flex-grow: 1;
-  background: rgba(8, 15, 29, 0.3); /* 70% opacity */
+  width: 200px;
+  height: 350px;
+  background: rgba(8, 15, 29, 0.3);
   border-radius: 10px;
-  padding: 50px;
+  padding: 15px;
   margin: 5px;
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2); /* Initial shadow */
+  overflow: visible;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
 
+  /* Add transition here */
+  transition: transform 0.2s ease-in-out, box-shadow 0.5s ease-in-out;
+}
+
+.card:hover {
+  transform: scale(1.05);
+  box-shadow: 0 12px 24px rgba(0, 0, 0, 0.4); /* Stronger shadow on hover */
+}
+
+.card:hover img {
+  transform: scale(1.05);
+  transition: transform 1s ease-in-out;
+}
+
+
+/* Make images fit properly in fixed-size cards */
+.card img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  border-radius: 23px
+}
+
+.card h3 {
+  margin-top: 10px;
+  font-size: 1rem;
+  text-align: center;
 }
 
 .app {
@@ -40,12 +81,20 @@ background: linear-gradient(to bottom, #080F1D 0%, #294B8A 66%, #A3ACCD 100%);
   overflow-x: hidden;
 }
 
-main {
-  flex: 1; /* This lets the body grow and fill the space between header and footer */
+
+header {
+  text-align: center;
+  background: rgba(255, 254, 254, 0.1); 
+  padding: 1rem;
   width: 100%;
+  color: #FFF;
+  text-shadow: #FFF 0 -1px 4px, rgb(0, 162, 255) 0 -2px 10px, #4400ff 0 -10px 20px, rgb(89, 0, 255) 0 -18px 40px;
+  position: sticky; /* Makes the header stick when scrolling */
+  top: 0;
+  z-index: 10; /* Ensures header stays above other content */
 }
 
-header, footer {
+footer {
   text-align: center;
   background-color: #191c25;
   padding: 1rem;
